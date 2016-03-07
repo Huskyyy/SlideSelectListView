@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:background="@drawable/list_item_drawable">
+
+    <TextView
+        android:id="@+id/my_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/list_item_text_left_margin"
+        android:textSize="@dimen/list_item_text_size"/>
+
+    <com.mwang.slideselectlistview.ScalableCheckBox
+        android:id="@+id/my_scalable_checkbox"
+        android:layout_width="@dimen/list_item_height"
+        android:layout_height="@dimen/list_item_height"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/list_item_checkbox_right_margin">
+    </com.mwang.slideselectlistview.ScalableCheckBox>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_margin"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorGray"/>
+
+
+</RelativeLayout>

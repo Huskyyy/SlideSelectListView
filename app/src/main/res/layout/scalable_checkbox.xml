@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
+
+    <CheckBox
+        android:id="@+id/my_checkbox"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+
+    <View
+        android:id="@+id/my_small_checkbox"
+        android:layout_width="@dimen/small_checkbox_size"
+        android:layout_height="@dimen/small_checkbox_size"
+        android:layout_centerInParent="true"
+        android:background="@color/colorDarkerGray"
+        android:visibility="invisible"/>
+
+</RelativeLayout>

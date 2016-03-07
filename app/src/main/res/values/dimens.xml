@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">4dp</dimen>
+    <dimen name="activity_vertical_margin">4dp</dimen>
+
+    <dimen name="list_item_height">60dp</dimen>
+    <dimen name="list_item_margin">1dp</dimen>
+
+    <dimen name="list_item_text_left_margin">8dp</dimen>
+    <dimen name="list_item_text_size">20sp</dimen>
+
+    <dimen name="list_item_checkbox_right_margin">8dp</dimen>
+
+    <dimen name="small_checkbox_size">4dp</dimen>
+
+</resources>

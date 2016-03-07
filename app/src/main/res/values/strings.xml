@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SlideSelectListView</string>
+    <string name="selected_sum">0</string>
+</resources>
