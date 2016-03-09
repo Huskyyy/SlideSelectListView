@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
  */
 public class ScalableCheckBox extends FrameLayout {
 
-    private Context mContext;
     private CheckBox mCheckBox;
     private View mSmallCheckBox;
     public ScalableCheckBox(Context context, AttributeSet attrs) {
@@ -22,7 +21,6 @@ public class ScalableCheckBox extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.scalable_checkbox, this);
         mCheckBox=(CheckBox)findViewById(R.id.my_checkbox);
         mSmallCheckBox=findViewById(R.id.my_small_checkbox);
-        mContext=context;
     }
 
     @Override

@@ -237,23 +237,17 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
     /**
      * The viewholder for each item view
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener, View.OnLongClickListener{
         public View mView;
         public TextView mTextView;
         public ScalableCheckBox mScalableCheckBox;
-        private RecyclerView recyclerView;
-        private ArrayList<String> data;
-        private MultiSelector selector;
 
         /**
          * Create a viewholder
-         * @param r The current recyclerview
-         * @param d The data of the recyclerview
-         * @param s The multiselector of the adapter
          * @param v The item view
          */
-        public ViewHolder(RecyclerView r, ArrayList<String> d, MultiSelector s, View v){
+        public ViewHolder(View v){
             super(v);
             mView=v;
             mTextView=(TextView)v.findViewById(R.id.my_textview);
@@ -263,10 +257,6 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
             mView.setOnLongClickListener(this);
             mScalableCheckBox.setOnClickListener(this);
             mScalableCheckBox.setOnLongClickListener(this);
-
-            recyclerView=r;
-            data=d;
-            selector=s;
         }
 
         /**
@@ -276,10 +266,10 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
          */
         @Override
         public void onClick(View v) {
-            if (selector.isMultiSelectable() || v.getId() == R.id.my_scalable_checkbox) {
-                setItem(recyclerView,this,data,selector,!selector.isItemChecked(getAdapterPosition()));
+            if (mSelector.isMultiSelectable() || v.getId() == R.id.my_scalable_checkbox) {
+                setItem(this,!mSelector.isItemChecked(getAdapterPosition()));
             } else {
-                Toast.makeText(recyclerView.getContext(), "REGULAR ONCLICK: item " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mRecyclerView.getContext(), "REGULAR ONCLICK: item " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -288,7 +278,7 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
          */
         @Override
         public boolean onLongClick(View v){
-            setItem(recyclerView,this,data,selector,true);
+            setItem(this,true);
             return true;
         }
 
@@ -301,7 +291,7 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
     @Override
     public SlideSelectListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
-        ViewHolder vh = new ViewHolder(mRecyclerView,mDataset,mSelector,v);
+        ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
@@ -330,35 +320,22 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
     }
 
     /**
-     * This method is called by the adapter
-     * @param viewHolder the viewholder to be set
+     * @param viewHolder The viewholder to be Set
      * @param check the state for the viewholder
      */
     public void setItem(ViewHolder viewHolder, boolean check){
-        setItem(mRecyclerView,viewHolder,mDataset,mSelector,check);
-    }
-
-    /**
-     * This method is called by the viewholder
-     * @param recyclerView The recyclerview of the viewholder
-     * @param viewHolder The viewholder to be Set
-     * @param data The data of the recyclerview
-     * @param selector The multiselector of the adapter
-     * @param check the state for the viewholder
-     */
-    public static void setItem(RecyclerView recyclerView, ViewHolder viewHolder, ArrayList<String> data, MultiSelector selector, boolean check){
 
 
-        switch(selector.getSelectedSum()){
+        switch(mSelector.getSelectedSum()){
             case 0:
                 // Enter into multi-selectable mode, expand the checkbox
                 if(check){
-                    for(int i=0;i<data.size();i++){
-                        ViewHolder holder = (ViewHolder)recyclerView.findViewHolderForAdapterPosition(i);
+                    for(int i=0;i<mDataset.size();i++){
+                        ViewHolder holder = (ViewHolder)mRecyclerView.findViewHolderForAdapterPosition(i);
                         if(holder!=null){
                             holder.mScalableCheckBox.expandCheckBox(true);
                         }else{
-                            recyclerView.getAdapter().notifyItemChanged(i);
+                            mRecyclerView.getAdapter().notifyItemChanged(i);
                         }
                     }
                     viewHolder.mScalableCheckBox.setChecked(check);
@@ -366,14 +343,14 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
                 break;
             case 1:
                 // Leave the multi-selectable mode, shrink the checkbox
-                if (selector.isItemChecked(viewHolder.getAdapterPosition()) && !check){
+                if (mSelector.isItemChecked(viewHolder.getAdapterPosition()) && !check){
                     viewHolder.mScalableCheckBox.setChecked(check);
-                    for(int i=0;i<data.size();i++){
-                        ViewHolder holder = (ViewHolder)recyclerView.findViewHolderForAdapterPosition(i);
+                    for(int i=0;i<mDataset.size();i++){
+                        ViewHolder holder = (ViewHolder)mRecyclerView.findViewHolderForAdapterPosition(i);
                         if(holder!=null){
                             holder.mScalableCheckBox.shrinkCheckBox(true);
                         }else{
-                            recyclerView.getAdapter().notifyItemChanged(i);
+                            mRecyclerView.getAdapter().notifyItemChanged(i);
                         }
                     }
                 // Otherwise, still in the multi-selectable mode
@@ -386,7 +363,7 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
                 break;
         }
 
-        selector.setItemChecked(viewHolder.getAdapterPosition(), check);
+        mSelector.setItemChecked(viewHolder.getAdapterPosition(), check);
         viewHolder.mView.setActivated(check);
 
     }
@@ -468,7 +445,7 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
     /**
      * A helper class which records the state for each item view
      */
-    private class MultiSelector{
+    private static class MultiSelector{
 
         private SparseBooleanArray selectedPositions=new SparseBooleanArray();
         private int selectedSum;
