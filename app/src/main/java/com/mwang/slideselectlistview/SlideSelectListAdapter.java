@@ -143,11 +143,11 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
              */
             @Override
             public void onTouchEvent(final RecyclerView rv, final MotionEvent event) {
+
                 xMove=event.getX();
                 yMove=event.getY();
-
                 currentPosition = rv.getChildAdapterPosition(rv.findChildViewUnder(xMove, yMove));
-                if(yMove>=rv.getHeight()-bound && yMove<rv.getHeight()){
+                if(yMove>=rv.getHeight()-bound && yMove<rv.getHeight() && xMove>=leftBorder && xMove<=rightBorder){
                     if(currentPosition!=getItemCount()-1 || ((ViewHolder)rv.findViewHolderForAdapterPosition(getItemCount()-1)).mView.getBottom()>rv.getHeight()){
                         if(scrollStatus!=CONTINUE_SCROLL_DOWN){
                             scrollStatus=CONTINUE_SCROLL_DOWN;
@@ -176,7 +176,7 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
                         scrollStatus=SCROLL_STOP;
                     }
                     return;
-                }else if(yMove<=bound && yMove>=0){
+                }else if(yMove<=bound && yMove>=0 && xMove>=leftBorder && xMove<=rightBorder){
                     if(currentPosition!=0 || ((ViewHolder)rv.findViewHolderForAdapterPosition(0)).mView.getBottom()>rv.getHeight()){
                         if(scrollStatus!=CONTINUE_SCROLL_UP){
                             scrollStatus=CONTINUE_SCROLL_UP;
@@ -209,21 +209,23 @@ public class SlideSelectListAdapter extends RecyclerView.Adapter<SlideSelectList
 
                 scrollStatus=SCROLL_STOP;
 
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_MOVE:
-                        setMovingItem();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if(moveStatus==HAS_MOVED){
-                            setItem((ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(downPosition), !mSelector.isItemChecked(downPosition));
-                        }
-                        break;
-                }
+                if(xMove>=leftBorder && xMove<=rightBorder && yMove<=rv.getHeight() && yMove>=0) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_MOVE:
+                            setMovingItem();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            if(moveStatus==HAS_MOVED){
+                                setItem((ViewHolder) mRecyclerView.findViewHolderForAdapterPosition(downPosition), !mSelector.isItemChecked(downPosition));
+                            }
+                            break;
+                    }
 
-                //record
-                xLastMove=xMove;
-                yLastMove=yMove;
-                lastPosition=currentPosition;
+                    //record
+                    xLastMove=xMove;
+                    yLastMove=yMove;
+                    lastPosition=currentPosition;
+                }
             }
 
             @Override
